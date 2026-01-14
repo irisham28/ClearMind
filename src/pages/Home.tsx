@@ -1,19 +1,32 @@
 import { AppLayout } from "@/components/layout/AppLayout";
 import { WellnessScore } from "@/components/home/WellnessScore";
+import { WellnessSurveyForm } from "@/components/home/WellnessSurveyForm";
+import { WellnessProgress } from "@/components/home/WellnessProgress";
 import { QuickActionCard } from "@/components/home/QuickActionCard";
 import { SoundCategoryCard } from "@/components/sounds/SoundCategoryCard";
+import { useWellnessSurvey } from "@/contexts/WellnessSurveyContext";
 import { Music, Sparkles, BookOpen, Wind, Calendar } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export default function Home() {
   const navigate = useNavigate();
-  
+  const { score, change, history, categoryScores } = useWellnessSurvey();
+
   const greeting = () => {
     const hour = new Date().getHours();
     if (hour < 12) return "Good morning";
     if (hour < 18) return "Good afternoon";
     return "Good evening";
   };
+
+  const lastUpdatedLabel = history[0]?.timestamp
+    ? new Date(history[0].timestamp).toLocaleString([], {
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+      })
+    : undefined;
 
   return (
     <AppLayout>
@@ -32,11 +45,17 @@ export default function Home() {
       </section>
 
       <div className="container py-8 md:py-12 space-y-12">
-        {/* Wellness Score */}
-        <section>
+        <section className="space-y-6">
           <div className="max-w-md">
-            <WellnessScore score={72} change={5} lastUpdated="Today" />
+            <WellnessScore score={score} change={change} lastUpdated={lastUpdatedLabel} />
           </div>
+          <WellnessProgress
+            score={score}
+            change={change}
+            history={history}
+            categoryScores={categoryScores}
+          />
+          <WellnessSurveyForm />
         </section>
 
         {/* Quick Actions */}

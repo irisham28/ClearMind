@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Play, Pause, Volume2, VolumeX, X, SkipBack, SkipForward } from "lucide-react";
 import { useAudio } from "@/contexts/AudioContext";
+import { useWellnessSurvey } from "@/contexts/WellnessSurveyContext";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
@@ -16,6 +17,7 @@ export function PersistentAudioPlayer() {
     seekTo, 
     closePlayer 
   } = useAudio();
+  const { score } = useWellnessSurvey();
 
   if (!currentTrack) return null;
 
@@ -53,18 +55,18 @@ export function PersistentAudioPlayer() {
         </div>
 
         <div className="container py-3">
-          <div className="flex items-center gap-4">
-            {/* Track Info */}
-            <motion.div 
-              className="flex items-center gap-3 flex-1 min-w-0"
-              initial={{ x: -20, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ delay: 0.1 }}
-            >
-              <div className={cn(
-                "w-12 h-12 rounded-lg bg-gradient-to-br flex items-center justify-center flex-shrink-0",
-                categoryColors[currentTrack.category] || "bg-primary"
-              )}>
+            <div className="flex items-center gap-4">
+              {/* Track Info */}
+              <motion.div 
+                className="flex items-center gap-3 flex-1 min-w-0"
+                initial={{ x: -20, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ delay: 0.1 }}
+              >
+                <div className={cn(
+                  "w-12 h-12 rounded-lg bg-gradient-to-br flex items-center justify-center flex-shrink-0",
+                  categoryColors[currentTrack.category] || "bg-primary"
+                )}>
                 <motion.div
                   animate={isPlaying ? { scale: [1, 1.1, 1] } : { scale: 1 }}
                   transition={{ repeat: isPlaying ? Infinity : 0, duration: 1 }}
@@ -94,9 +96,15 @@ export function PersistentAudioPlayer() {
                 <p className="font-medium text-foreground truncate">{currentTrack.title}</p>
                 <p className="text-sm text-muted-foreground capitalize">{currentTrack.category} • {currentTrack.duration}</p>
               </div>
-            </motion.div>
+              </motion.div>
+              <div className="hidden md:flex flex-col items-end text-right space-y-1">
+                <span className="text-[11px] uppercase tracking-wide text-muted-foreground">
+                  Wellness Score
+                </span>
+                <span className="text-lg font-bold text-primary">{score}</span>
+              </div>
 
-            {/* Controls */}
+              {/* Controls */}
             <div className="flex items-center gap-2">
               <Button variant="ghost" size="icon" className="hidden md:flex">
                 <SkipBack className="w-4 h-4" />

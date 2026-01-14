@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { AudioProvider } from "@/contexts/AudioContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
+import { WellnessSurveyProvider } from "@/contexts/WellnessSurveyContext";
 import { PersistentAudioPlayer } from "@/components/audio/PersistentAudioPlayer";
 import Index from "./pages/Index";
 import Sounds from "./pages/Sounds";
@@ -46,16 +47,18 @@ function AnimatedRoutes() {
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider>
-      <AudioProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <AnimatedRoutes />
-            <PersistentAudioPlayer />
-          </BrowserRouter>
-        </TooltipProvider>
-      </AudioProvider>
+      <WellnessSurveyProvider>
+        <AudioProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <AnimatedRoutes />
+              <PersistentAudioPlayer />
+            </BrowserRouter>
+          </TooltipProvider>
+        </AudioProvider>
+      </WellnessSurveyProvider>
     </ThemeProvider>
   </QueryClientProvider>
 );
