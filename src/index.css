@@ -1,0 +1,194 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+
+@layer base {
+  :root {
+    /* Primary - Calming Sage Green */
+    --primary: 152 32% 42%;
+    --primary-foreground: 0 0% 100%;
+    
+    /* Background - Warm off-white */
+    --background: 40 20% 98%;
+    --foreground: 220 15% 15%;
+
+    /* Cards - Clean white */
+    --card: 0 0% 100%;
+    --card-foreground: 220 15% 15%;
+
+    /* Popover */
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 15% 15%;
+
+    /* Secondary - Soft teal */
+    --secondary: 180 25% 94%;
+    --secondary-foreground: 180 35% 25%;
+
+    /* Muted - Warm gray */
+    --muted: 40 10% 94%;
+    --muted-foreground: 220 10% 45%;
+
+    /* Accent - Warm terracotta */
+    --accent: 20 60% 55%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Destructive */
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Borders */
+    --border: 220 10% 90%;
+    --input: 220 10% 90%;
+    --ring: 152 32% 42%;
+
+    --radius: 0.375rem;
+
+    /* Custom semantic tokens */
+    --surface-elevated: 0 0% 100%;
+    --surface-sunken: 40 15% 96%;
+    
+    /* Category colors */
+    --chinese: 15 45% 50%;
+    --indian: 35 70% 50%;
+    --malay: 160 40% 45%;
+    --nature: 140 35% 45%;
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.03);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+
+    /* Sidebar tokens */
+    --sidebar-background: 40 20% 98%;
+    --sidebar-foreground: 220 15% 15%;
+    --sidebar-primary: 152 32% 42%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 40 10% 94%;
+    --sidebar-accent-foreground: 220 15% 15%;
+    --sidebar-border: 220 10% 90%;
+    --sidebar-ring: 152 32% 42%;
+  }
+
+  .dark {
+    --primary: 152 35% 55%;
+    --primary-foreground: 220 15% 10%;
+    
+    --background: 220 15% 10%;
+    --foreground: 40 10% 95%;
+
+    --card: 220 15% 13%;
+    --card-foreground: 40 10% 95%;
+
+    --popover: 220 15% 13%;
+    --popover-foreground: 40 10% 95%;
+
+    --secondary: 220 15% 18%;
+    --secondary-foreground: 40 10% 90%;
+
+    --muted: 220 15% 18%;
+    --muted-foreground: 220 10% 60%;
+
+    --accent: 20 50% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 15% 20%;
+    --input: 220 15% 20%;
+    --ring: 152 35% 55%;
+
+    --surface-elevated: 220 15% 15%;
+    --surface-sunken: 220 15% 8%;
+
+    --sidebar-background: 220 15% 10%;
+    --sidebar-foreground: 40 10% 95%;
+    --sidebar-primary: 152 35% 55%;
+    --sidebar-primary-foreground: 220 15% 10%;
+    --sidebar-accent: 220 15% 18%;
+    --sidebar-accent-foreground: 40 10% 95%;
+    --sidebar-border: 220 15% 20%;
+    --sidebar-ring: 152 35% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+  }
+}
+
+@layer components {
+  .feature-card {
+    @apply bg-card rounded-lg p-6 shadow-sm border border-border transition-all duration-200;
+  }
+
+  .feature-card:hover {
+    @apply shadow-md;
+  }
+
+  .category-card {
+    @apply relative overflow-hidden rounded-lg aspect-square flex flex-col justify-end p-4 transition-transform duration-200;
+  }
+
+  .category-card:hover {
+    @apply scale-[1.02];
+  }
+
+  .nav-item {
+    @apply flex flex-col items-center gap-1 py-2 px-4 text-muted-foreground transition-colors;
+  }
+
+  .nav-item.active {
+    @apply text-primary;
+  }
+
+  .section-header {
+    @apply text-lg font-semibold mb-4;
+  }
+
+  .practice-card {
+    @apply bg-card rounded-lg p-4 border border-border flex items-center gap-4 transition-all duration-200 cursor-pointer;
+  }
+
+  .practice-card:hover {
+    @apply bg-secondary/50;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 20px);
+  }
+
+  .gradient-chinese {
+    background: linear-gradient(135deg, hsl(15 45% 50% / 0.9), hsl(15 45% 35% / 0.95));
+  }
+
+  .gradient-indian {
+    background: linear-gradient(135deg, hsl(35 70% 50% / 0.9), hsl(35 70% 35% / 0.95));
+  }
+
+  .gradient-malay {
+    background: linear-gradient(135deg, hsl(160 40% 45% / 0.9), hsl(160 40% 30% / 0.95));
+  }
+
+  .gradient-nature {
+    background: linear-gradient(135deg, hsl(140 35% 45% / 0.9), hsl(140 35% 30% / 0.95));
+  }
+}
