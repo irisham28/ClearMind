@@ -16,6 +16,7 @@ import Settings from "./pages/Settings";
 import About from "./pages/About";
 import Privacy from "./pages/Privacy";
 import FAQ from "./pages/FAQ";
+import DailyRoutine from "./pages/DailyRoutine";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -35,6 +36,7 @@ function AnimatedRoutes() {
         <Route path="/about" element={<About />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/faq" element={<FAQ />} />
+        <Route path="/daily-routine" element={<DailyRoutine />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AnimatePresence>
