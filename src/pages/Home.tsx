@@ -2,7 +2,7 @@ import { AppLayout } from "@/components/layout/AppLayout";
 import { WellnessScore } from "@/components/home/WellnessScore";
 import { QuickActionCard } from "@/components/home/QuickActionCard";
 import { SoundCategoryCard } from "@/components/sounds/SoundCategoryCard";
-import { Music, Sparkles, BookOpen, Wind } from "lucide-react";
+import { Music, Sparkles, BookOpen, Wind, Calendar } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export default function Home() {
@@ -42,7 +42,7 @@ export default function Home() {
         {/* Quick Actions */}
         <section>
           <h2 className="text-2xl font-semibold mb-6">Quick Start</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             <QuickActionCard
               icon={<Wind className="w-5 h-5" />}
               title="Breathe"
@@ -67,6 +67,12 @@ export default function Home() {
               title="Resources"
               description="Coping strategies & tips"
               onClick={() => navigate("/resources")}
+            />
+            <QuickActionCard
+              icon={<Calendar className="w-5 h-5" />}
+              title="Daily Routine"
+              description="Build mindfulness habits"
+              onClick={() => navigate("/daily-routine")}
             />
           </div>
         </section>
