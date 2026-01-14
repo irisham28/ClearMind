@@ -1,73 +1,85 @@
-# Welcome to your Lovable project
+# ClearMind App & Website Pre-phase Document Template
 
-## Project info
+Live preview: https://clearmindapp.netlify.app/
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## App & Website Pre-phase Document Template
 
-## How can I edit this code?
+### 1. Introduction
+#### 1.1 Purpose of the app
+The culturally sensitive mental wellbeing app seeks to provide a sense of calm and help users in Singapore develop coping strategies. It blends traditional knowledge and contemporary practices, making cultural inclusion a priority while tracking improvements through in-app Likert scale surveys to demonstrate relative wellbeing changes.
 
-There are several ways of editing your application.
+#### 1.2 Scope of the app
+The app revolves around three core features:
 
-**Use Lovable**
+- **Sound-based wellbeing** that plays calming music curated by regional and cultural specifications, including Traditional Chinese instruments (guqin, singing bowls), Indian classical music and mantras, Malay gamelan-inspired sounds, and nature recordings from Singapore’s parks and gardens.
+- **Mindfulness practices** that combine informative text and guided exercises such as Traditional Chinese meditation (气功 Qigong), Islamic meditation aligned with prayer times, Hindu yoga and pranayama, Buddhist mindfulness techniques, and secular mindfulness for non-religious users.
+- **Context integration** resources that address academic stress specific to Singapore, intergenerational relationship guidance, coping strategies for fast-paced city living, and tips for maintaining work-life balance.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+### 2. Functional Requirements/Features
+#### 2.1 Sound-based wellbeing
+- **Description:** Plays regionally curated audio to promote relaxation and calm.
+- **Inputs:** Data modules containing the relevant audio assets.
+- **Outputs:** Media playback of the selected sounds.
 
-Changes made via Lovable will be committed automatically to this repo.
+#### 2.2 Context integration features
+- **Description:** Surfaces culturally contextualized text and guidance across the dashboard experience.
+- **Inputs:** Dashboard text display driven by demographic information provided during onboarding.
+- **Outputs:** Textual guidance presented throughout the dashboard.
+- **Dependencies:** Personalization based on age and demographic metadata captured during onboarding.
 
-**Use your preferred IDE**
+#### 2.3 Mindfulness practices
+- **Description:** Presents informative text and interactive exercises centered on diverse mindfulness traditions.
+- **Inputs:** Informational and instructional text along with exercise prompts.
+- **Outputs:** Interactive access to the text content and exercises for users.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### 4. System Requirements
+- **Hardware:** Mobile devices (iOS and Android) with at least 2 GB RAM and a modern web browser.
+- **Software:** iOS 12 or later, Android 8.0 or later, and up-to-date versions of Chrome, Safari, or Firefox.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### 5. User Interface Requirements
+#### 5.1 Overview
+The UI remains clean and minimalist, emphasizing intuitive navigation with limited buttons, swipe gestures, and uncluttered screens to encourage exploration within the app experience.
 
-Follow these steps:
+### 6. Legal and Regulatory Requirements
+#### 6.1 Privacy
+The app must comply with all relevant privacy and security regulations that are in force in Singapore at the time of launch.
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### 7. Appendix
+#### 7.1 References
+List all referenced documents, resources, and inspiration sources that informed the development document.
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### Document Revision History
+- **Version 1.0:** Initial release (Date: MM/DD/YYYY)
 
-# Step 3: Install the necessary dependencies.
-npm i
+## IoT/ML/Product Design/Robotics Pre-phase Document Template
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+### 1. Introduction
+#### 1.1 Purpose of the project
+Outline the driving objectives and expected value of the project, clarifying why it is being developed and who it is intended to serve.
 
-**Edit a file directly in GitHub**
+#### 1.2 Scope of the project
+Define the project boundaries by listing the features and capabilities that are included (and optionally excluded) to set stakeholder expectations.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### 2. Functional Requirements
+Document each functionality with:
 
-**Use GitHub Codespaces**
+- **Function 1**
+  - **Description:** Detailed explanation of the functionality or feature.
+  - **Inputs:** Information or data required to execute the feature.
+  - **Outputs:** Results or data produced by the feature.
+- **Function 2…n**
+  - **Description:** Another detailed explanation of a feature.
+  - **Inputs:** Relevant data or triggers.
+  - **Outputs:** Expected results or behavior.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### 3. Cost of the Prototype
+Specify whether the prototype cost will be covered by parents or other sponsors.
 
-## What technologies are used for this project?
+### 4. Knowledge and Skill of the Scholar
+Document the scholar’s relevant skills, experiences, and knowledge that support execution of the technical project.
 
-This project is built with:
+### 5. Implementation
+Describe the tentative implementation plan, including timelines, milestones, and key activities.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+### 6. Impact
+Outline the envisioned social, educational, or commercial impact of the project.
