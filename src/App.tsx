@@ -12,6 +12,9 @@ import Sounds from "./pages/Sounds";
 import Mindfulness from "./pages/Mindfulness";
 import Resources from "./pages/Resources";
 import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
+import About from "./pages/About";
+import Privacy from "./pages/Privacy";
 import FAQ from "./pages/FAQ";
 import NotFound from "./pages/NotFound";
 
@@ -28,6 +31,9 @@ function AnimatedRoutes() {
         <Route path="/mindfulness" element={<Mindfulness />} />
         <Route path="/resources" element={<Resources />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/privacy" element={<Privacy />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

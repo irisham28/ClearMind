@@ -13,12 +13,12 @@ const faqs = [
     category: "General",
     questions: [
       {
-        q: "What is ClearMind?",
-        a: "ClearMind is a mental wellness app designed specifically for Singaporeans, offering culturally-relevant meditation practices, soothing sounds, and mental health resources to help you find peace and balance in daily life.",
+        q: "What is Family Chores?",
+        a: "Family Chores is a culturally sensitive mental wellness app designed specifically for Singaporeans, offering culturally-relevant meditation practices, soothing sounds, and mental health resources to help you find peace and balance in daily life.",
       },
       {
-        q: "Is ClearMind free to use?",
-        a: "Yes! ClearMind offers a free tier with access to basic meditation practices, sounds, and resources. Premium features may be available in future updates.",
+        q: "Is Family Chores free to use?",
+        a: "Yes! Family Chores offers a free tier with access to basic meditation practices, sounds, and resources. Premium features may be available in future updates.",
       },
       {
         q: "How do I get started?",
@@ -116,7 +116,7 @@ export default function FAQ() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
             >
-              Find answers to common questions about ClearMind
+              Find answers to common questions about Family Chores
             </motion.p>
           </div>
         </section>
