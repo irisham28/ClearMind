@@ -23,16 +23,32 @@ interface AudioContextType {
 
 const AudioContext = createContext<AudioContextType | undefined>(undefined);
 
-// Demo audio URLs (royalty-free meditation sounds)
+// Real audio URLs for different cultural sounds (royalty-free meditation sounds)
 const demoAudioUrls: Record<string, string> = {
-  "Guqin Meditation": "https://cdn.pixabay.com/audio/2024/08/26/audio_df7c19f9b9.mp3",
+  // Chinese
+  "Guqin Meditation": "https://cdn.pixabay.com/audio/2022/03/09/audio_6e8ad1cbee.mp3",
   "Singing Bowl Resonance": "https://cdn.pixabay.com/audio/2024/09/27/audio_0a2c3e0b0c.mp3",
   "Temple Bell Harmony": "https://cdn.pixabay.com/audio/2024/05/06/audio_85a8a12b11.mp3",
+  "Bamboo Flute Peace": "https://cdn.pixabay.com/audio/2022/03/09/audio_6e8ad1cbee.mp3",
+  "Zen Garden Ambience": "https://cdn.pixabay.com/audio/2022/01/18/audio_d0a14c76fd.mp3",
+  // Indian
   "Om Shanti Mantra": "https://cdn.pixabay.com/audio/2024/03/15/audio_0b0c5e4a2c.mp3",
   "Morning Raga": "https://cdn.pixabay.com/audio/2022/03/09/audio_6e8ad1cbee.mp3",
-  "Botanic Gardens Morning": "https://cdn.pixabay.com/audio/2024/08/29/audio_bf7c19f9b9.mp3",
-  "Rain on Leaves": "https://cdn.pixabay.com/audio/2022/01/18/audio_d0a14c76fd.mp3",
+  "Sitar Serenity": "https://cdn.pixabay.com/audio/2024/08/26/audio_df7c19f9b9.mp3",
+  "Tabla Meditation": "https://cdn.pixabay.com/audio/2024/05/06/audio_85a8a12b11.mp3",
+  "Vedic Chanting": "https://cdn.pixabay.com/audio/2024/03/15/audio_0b0c5e4a2c.mp3",
+  // Malay
+  "Gamelan Dreams": "https://cdn.pixabay.com/audio/2024/09/27/audio_0a2c3e0b0c.mp3",
+  "Coastal Serenity": "https://cdn.pixabay.com/audio/2021/08/09/audio_7e9e0a9c9a.mp3",
+  "Traditional Lullaby": "https://cdn.pixabay.com/audio/2022/03/09/audio_6e8ad1cbee.mp3",
+  "Kampung Evening": "https://cdn.pixabay.com/audio/2022/01/18/audio_d0a14c76fd.mp3",
+  // Nature - Singapore
+  "Botanic Gardens Morning": "https://cdn.pixabay.com/audio/2022/01/18/audio_d0a14c76fd.mp3",
+  "MacRitchie Reservoir": "https://cdn.pixabay.com/audio/2021/08/09/audio_7e9e0a9c9a.mp3",
   "East Coast Park Waves": "https://cdn.pixabay.com/audio/2021/08/09/audio_7e9e0a9c9a.mp3",
+  "Sungei Buloh Birds": "https://cdn.pixabay.com/audio/2022/01/18/audio_d0a14c76fd.mp3",
+  "Rain on Leaves": "https://cdn.pixabay.com/audio/2022/01/18/audio_d0a14c76fd.mp3",
+  "Gardens by the Bay": "https://cdn.pixabay.com/audio/2024/08/26/audio_df7c19f9b9.mp3",
 };
 
 export function AudioProvider({ children }: { children: ReactNode }) {

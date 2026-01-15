@@ -2,15 +2,18 @@ import { AppLayout } from "@/components/layout/AppLayout";
 import {
   PracticeCard,
 } from "@/components/mindfulness/PracticeCard";
-import {
-  PracticeDetailPanel,
-  PracticeDetail,
-} from "@/components/mindfulness/PracticeDetailPanel";
+import { GuidedSessionModal } from "@/components/mindfulness/GuidedSessionModal";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Zap, Moon, Heart, Wind, Flower2, Star } from "lucide-react";
 import { ReactNode, useState } from "react";
 
 type PracticeGroupKey = "qigong" | "islamic" | "hindu" | "buddhist" | "secular";
+
+interface PracticeDetail {
+  highlight: string;
+  steps: string[];
+  cues?: string[];
+}
 
 interface MindfulnessPractice {
   icon: ReactNode;
@@ -21,86 +24,6 @@ interface MindfulnessPractice {
 }
 
 const practices: Record<PracticeGroupKey, MindfulnessPractice[]> = {
-  qigong: [
-    {
-      icon: <Wind className="w-5 h-5" />,
-      title: "Qi Breathing Exercise",
-      description: "Basic breathing technique to cultivate life energy",
-      duration: "10 min",
-    },
-    {
-      icon: <Zap className="w-5 h-5" />,
-      title: "Standing Meditation",
-      description: "Zhan Zhuang practice for grounding and energy flow",
-      duration: "15 min",
-    },
-    {
-      icon: <Flower2 className="w-5 h-5" />,
-      title: "Eight Brocades",
-      description: "Traditional movement sequence for health",
-      duration: "20 min",
-    },
-  ],
-  islamic: [
-    {
-      icon: <Moon className="w-5 h-5" />,
-      title: "Pre-Prayer Meditation",
-      description: "Centering practice aligned with Salah times",
-      duration: "5 min",
-    },
-    {
-      icon: <Heart className="w-5 h-5" />,
-      title: "Dhikr Practice",
-      description: "Remembrance meditation for inner peace",
-      duration: "10 min",
-    },
-    {
-      icon: <Star className="w-5 h-5" />,
-      title: "Tafakkur Reflection",
-      description: "Contemplative meditation on creation",
-      duration: "15 min",
-    },
-  ],
-  hindu: [
-    {
-      icon: <Flower2 className="w-5 h-5" />,
-      title: "Pranayama Basics",
-      description: "Foundational breathing techniques",
-      duration: "10 min",
-    },
-    {
-      icon: <Star className="w-5 h-5" />,
-      title: "Simple Yoga Sequence",
-      description: "Gentle asanas for relaxation",
-      duration: "20 min",
-    },
-    {
-      icon: <Heart className="w-5 h-5" />,
-      title: "Mantra Meditation",
-      description: "Sacred sound practice for focus",
-      duration: "15 min",
-    },
-  ],
-  buddhist: [
-    {
-      icon: <Moon className="w-5 h-5" />,
-      title: "Mindful Breathing",
-      description: "Anapanasati meditation technique",
-      duration: "10 min",
-    },
-    {
-      icon: <Heart className="w-5 h-5" />,
-      title: "Loving Kindness",
-      description: "Metta meditation for compassion",
-      duration: "15 min",
-    },
-    {
-      icon: <Wind className="w-5 h-5" />,
-      title: "Body Scan",
-      description: "Progressive awareness practice",
-      duration: "20 min",
-    },
-  ],
   secular: [
     {
       icon: <Wind className="w-5 h-5" />,
@@ -129,7 +52,7 @@ const practices: Record<PracticeGroupKey, MindfulnessPractice[]> = {
           "Choose a steady anchor (breath, mantra, or a gentle tone).",
           "Set a timer for 10 minutes and rest the mind on that anchor.",
           "When distractions arrive, label them (e.g., 'thinking') and return supportively to the anchor.",
-          "Cycle through five anchor returns so notice how the attention stays stronger each time.",
+          "Cycle through five anchor returns to notice how the attention stays stronger each time.",
         ],
         cues: ["Anchor & return", "Label distractions gently"],
       },
@@ -151,20 +74,224 @@ const practices: Record<PracticeGroupKey, MindfulnessPractice[]> = {
       },
     },
   ],
+  qigong: [
+    {
+      icon: <Wind className="w-5 h-5" />,
+      title: "Qi Breathing Exercise",
+      description: "Basic breathing technique to cultivate life energy",
+      duration: "10 min",
+      detail: {
+        highlight: "Cultivate vital Qi energy",
+        steps: [
+          "Stand with feet shoulder-width apart, knees slightly bent.",
+          "Place hands on lower belly (dantian) and breathe naturally.",
+          "Inhale, visualizing energy rising from earth through your feet.",
+          "Exhale, feeling the Qi settle and warm your lower belly.",
+        ],
+        cues: ["Root to earth", "Warm the dantian"],
+      },
+    },
+    {
+      icon: <Zap className="w-5 h-5" />,
+      title: "Standing Meditation",
+      description: "Zhan Zhuang practice for grounding and energy flow",
+      duration: "15 min",
+      detail: {
+        highlight: "Zhan Zhuang standing post",
+        steps: [
+          "Stand with feet parallel, arms hanging naturally.",
+          "Raise arms as if embracing a large tree at chest height.",
+          "Maintain soft knees, relaxed shoulders, and steady breathing.",
+          "Hold the posture, feeling rooted below and expansive above.",
+        ],
+        cues: ["Embrace the tree", "Sink & rise"],
+      },
+    },
+    {
+      icon: <Flower2 className="w-5 h-5" />,
+      title: "Eight Brocades",
+      description: "Traditional movement sequence for health",
+      duration: "20 min",
+      detail: {
+        highlight: "Ba Duan Jin movements",
+        steps: [
+          "Begin with 'Two Hands Hold Up the Heavens' - stretch arms overhead.",
+          "Proceed through each brocade movement with slow, deliberate motion.",
+          "Coordinate breath with each movement - inhale on opening, exhale on closing.",
+          "Complete the sequence feeling energized and balanced.",
+        ],
+        cues: ["Flow like water", "Breathe with motion"],
+      },
+    },
+  ],
+  islamic: [
+    {
+      icon: <Moon className="w-5 h-5" />,
+      title: "Pre-Prayer Meditation",
+      description: "Centering practice aligned with Salah times",
+      duration: "5 min",
+      detail: {
+        highlight: "Khushu preparation",
+        steps: [
+          "Find a quiet space and sit in a comfortable position.",
+          "Close your eyes and take three deep breaths to center yourself.",
+          "Reflect on your intention (niyyah) for the upcoming prayer.",
+          "Let go of worldly thoughts and prepare your heart for connection.",
+        ],
+        cues: ["Set intention", "Release worries"],
+      },
+    },
+    {
+      icon: <Heart className="w-5 h-5" />,
+      title: "Dhikr Practice",
+      description: "Remembrance meditation for inner peace",
+      duration: "10 min",
+      detail: {
+        highlight: "Divine remembrance",
+        steps: [
+          "Sit comfortably and close your eyes gently.",
+          "Begin with 'SubhanAllah' (Glory to God) - repeat 33 times.",
+          "Continue with 'Alhamdulillah' (Praise to God) - repeat 33 times.",
+          "Complete with 'Allahu Akbar' (God is Greatest) - repeat 33 times.",
+        ],
+        cues: ["33-33-33 cycle", "Heart presence"],
+      },
+    },
+    {
+      icon: <Star className="w-5 h-5" />,
+      title: "Tafakkur Reflection",
+      description: "Contemplative meditation on creation",
+      duration: "15 min",
+      detail: {
+        highlight: "Contemplation practice",
+        steps: [
+          "Choose an aspect of creation to contemplate (nature, sky, life).",
+          "Observe with wonder and gratitude for 5 minutes.",
+          "Reflect on the signs and wisdom in what you observe.",
+          "Close with gratitude for the beauty and order of creation.",
+        ],
+        cues: ["Wonder & awe", "Signs in creation"],
+      },
+    },
+  ],
+  hindu: [
+    {
+      icon: <Flower2 className="w-5 h-5" />,
+      title: "Pranayama Basics",
+      description: "Foundational breathing techniques",
+      duration: "10 min",
+      detail: {
+        highlight: "Breath control practice",
+        steps: [
+          "Sit in a comfortable position with spine straight.",
+          "Practice Ujjayi breath - constrict the back of throat slightly while breathing.",
+          "Try Nadi Shodhana - alternate nostril breathing for balance.",
+          "Complete with natural breaths, feeling the prana (life force) flow.",
+        ],
+        cues: ["Ocean breath", "Balance the nadis"],
+      },
+    },
+    {
+      icon: <Star className="w-5 h-5" />,
+      title: "Simple Yoga Sequence",
+      description: "Gentle asanas for relaxation",
+      duration: "20 min",
+      detail: {
+        highlight: "Gentle asana flow",
+        steps: [
+          "Begin in Child's Pose (Balasana) - rest forehead on mat.",
+          "Move to Cat-Cow stretches - arch and round the spine.",
+          "Hold Downward Dog for 5 breaths, then step forward.",
+          "End in Savasana - lie flat and release all tension.",
+        ],
+        cues: ["Breath guides movement", "Release in Savasana"],
+      },
+    },
+    {
+      icon: <Heart className="w-5 h-5" />,
+      title: "Mantra Meditation",
+      description: "Sacred sound practice for focus",
+      duration: "15 min",
+      detail: {
+        highlight: "Japa meditation",
+        steps: [
+          "Choose a mantra (Om, So Hum, or a personal mantra).",
+          "Sit quietly and begin repeating the mantra silently.",
+          "Use mala beads if available - one bead per repetition.",
+          "Let the mantra become effortless, merging with your awareness.",
+        ],
+        cues: ["108 repetitions", "Sound becomes silence"],
+      },
+    },
+  ],
+  buddhist: [
+    {
+      icon: <Moon className="w-5 h-5" />,
+      title: "Mindful Breathing",
+      description: "Anapanasati meditation technique",
+      duration: "10 min",
+      detail: {
+        highlight: "Breath awareness practice",
+        steps: [
+          "Sit comfortably and gently close your eyes.",
+          "Notice the natural rhythm of your breath without changing it.",
+          "Observe where you feel the breath most clearly (nose, chest, belly).",
+          "When the mind wanders, gently return to the breath sensation.",
+        ],
+        cues: ["Just this breath", "Begin again"],
+      },
+    },
+    {
+      icon: <Heart className="w-5 h-5" />,
+      title: "Loving Kindness",
+      description: "Metta meditation for compassion",
+      duration: "15 min",
+      detail: {
+        highlight: "Metta bhavana",
+        steps: [
+          "Begin by directing loving kindness to yourself: 'May I be happy, may I be peaceful.'",
+          "Extend to a loved one: 'May you be happy, may you be peaceful.'",
+          "Extend to a neutral person, then to a difficult person.",
+          "Finally, extend to all beings everywhere without exception.",
+        ],
+        cues: ["Start with self", "Expand outward"],
+      },
+    },
+    {
+      icon: <Wind className="w-5 h-5" />,
+      title: "Body Scan",
+      description: "Progressive awareness practice",
+      duration: "20 min",
+      detail: {
+        highlight: "Systematic body awareness",
+        steps: [
+          "Lie down and bring attention to the top of your head.",
+          "Slowly scan down through face, neck, shoulders, arms.",
+          "Continue through torso, hips, legs, down to the toes.",
+          "Notice sensations without judgment - warmth, tingling, tension, ease.",
+        ],
+        cues: ["Observe, don't change", "Sensation by sensation"],
+      },
+    },
+  ],
 };
 
 const practiceDescriptions: Record<PracticeGroupKey, string> = {
+  secular: "Evidence-based mindfulness practices suitable for all backgrounds, focusing on stress reduction and mental clarity.",
   qigong: "气功 (Qigong) is an ancient Chinese practice combining breathing, movement, and meditation to cultivate vital life energy (气 Qi).",
   islamic: "Islamic meditation practices focus on remembrance (Dhikr) and contemplation (Tafakkur), aligned with daily prayer times.",
   hindu: "Hindu practices include Yoga and Pranayama (breath control), ancient sciences for physical and mental wellbeing.",
   buddhist: "Buddhist mindfulness emphasizes present-moment awareness and compassion through systematic meditation techniques.",
-  secular: "Evidence-based mindfulness practices suitable for all backgrounds, focusing on stress reduction and mental clarity.",
 };
 
 export default function Mindfulness() {
-  const [selectedPractice, setSelectedPractice] = useState<MindfulnessPractice>(
-    practices.secular[0],
-  );
+  const [selectedPractice, setSelectedPractice] = useState<MindfulnessPractice | null>(null);
+  const [isSessionOpen, setIsSessionOpen] = useState(false);
+
+  const handleStartSession = (practice: MindfulnessPractice) => {
+    setSelectedPractice(practice);
+    setIsSessionOpen(true);
+  };
 
   const practiceEntries = Object.entries(
     practices,
@@ -212,21 +339,27 @@ export default function Mindfulness() {
                     title={practice.title}
                     description={practice.description}
                     duration={practice.duration}
-                    onClick={() => setSelectedPractice(practice)}
+                    onClick={() => handleStartSession(practice)}
                   />
                 ))}
               </div>
             </TabsContent>
           ))}
         </Tabs>
+      </div>
 
-        <PracticeDetailPanel
+      {/* Guided Session Modal */}
+      {selectedPractice && (
+        <GuidedSessionModal
+          isOpen={isSessionOpen}
+          onClose={() => setIsSessionOpen(false)}
           title={selectedPractice.title}
           description={selectedPractice.description}
-          duration={selectedPractice.duration}
-          detail={selectedPractice.detail}
+          duration={selectedPractice.duration || "5 min"}
+          steps={selectedPractice.detail?.steps}
+          cues={selectedPractice.detail?.cues}
         />
-      </div>
+      )}
     </AppLayout>
   );
 }

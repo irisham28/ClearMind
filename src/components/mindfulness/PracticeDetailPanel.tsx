@@ -80,9 +80,6 @@ export function PracticeDetailPanel({
         <Button variant="default" size="sm">
           Start session
         </Button>
-        <Button variant="ghost" size="sm">
-          Save to routine
-        </Button>
       </div>
     </section>
   );
