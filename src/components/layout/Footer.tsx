@@ -14,7 +14,7 @@ export function Footer() {
               <span className="font-semibold text-lg text-foreground">ClearMind</span>
             </div>
             <p className="text-sm text-muted-foreground max-w-sm">
-              A culturally sensitive mental wellbeing app for Singapore. Find calm through traditional practices and modern techniques.
+              A culturally sensitive mental wellbeing app. Find calm through traditional practices and modern techniques.
             </p>
           </div>
 
@@ -65,7 +65,7 @@ export function Footer() {
 
         <div className="border-t border-border mt-8 pt-8">
           <p className="text-xs text-muted-foreground text-center">
-            © {new Date().getFullYear()} ClearMind. Designed for mental wellbeing in Singapore.
+            © {new Date().getFullYear()} ClearMind. Designed for your mental wellbeing.
           </p>
         </div>
       </div>
