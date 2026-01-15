@@ -9,7 +9,6 @@ const navItems = [
   { label: "Sounds", path: "/sounds" },
   { label: "Mindfulness", path: "/mindfulness" },
   { label: "Resources", path: "/resources" },
-  { label: "Profile", path: "/profile" },
 ];
 
 export function Header() {
