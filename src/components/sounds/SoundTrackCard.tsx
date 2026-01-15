@@ -3,7 +3,6 @@ import { cn } from "@/lib/utils";
 
 interface SoundTrackCardProps {
   title: string;
-  duration: string;
   category: "chinese" | "indian" | "malay" | "nature";
   isPlaying?: boolean;
   onPlayPause?: () => void;
@@ -18,7 +17,6 @@ const categoryColors = {
 
 export function SoundTrackCard({
   title,
-  duration,
   category,
   isPlaying = false,
   onPlayPause,
@@ -40,7 +38,6 @@ export function SoundTrackCard({
       </button>
       <div className="flex-1 min-w-0">
         <h4 className="font-medium text-sm text-foreground truncate">{title}</h4>
-        <p className="text-xs text-muted-foreground mt-0.5">{duration}</p>
       </div>
     </div>
   );

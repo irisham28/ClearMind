@@ -43,12 +43,12 @@ const demoAudioUrls: Record<string, string> = {
   "Traditional Lullaby": "https://cdn.freesound.org/previews/456/456142_8162587-lq.mp3",
   "Kampung Evening": "https://cdn.freesound.org/previews/531/531947_6460019-lq.mp3",
   // Nature sounds
-  "Botanic Gardens Morning": "https://cdn.freesound.org/previews/531/531947_6460019-lq.mp3",
-  "MacRitchie Reservoir": "https://cdn.freesound.org/previews/527/527409_2391552-lq.mp3",
-  "East Coast Park Waves": "https://cdn.freesound.org/previews/527/527409_2391552-lq.mp3",
-  "Sungei Buloh Birds": "https://cdn.freesound.org/previews/531/531947_6460019-lq.mp3",
-  "Rain on Leaves": "https://cdn.freesound.org/previews/531/531947_6460019-lq.mp3",
-  "Gardens by the Bay": "https://cdn.freesound.org/previews/456/456142_8162587-lq.mp3",
+  "Botanic Gardens Morning": "/audio/botanical-gardens-17568.mp3",
+  "MacRitchie Reservoir": "/audio/rain-on-the-window-114709.mp3",
+  "East Coast Park Waves": "/audio/waves-hitting-the-rocks-16680.mp3",
+  "Sungei Buloh Birds": "/audio/birds-19624.mp3",
+  "Rain on Leaves": "/audio/rain-on-the-window-114709.mp3",
+  "Gardens by the Bay": "/audio/the-bay-67315.mp3",
 };
 
 // Default fallback audio

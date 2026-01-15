@@ -1,10 +1,11 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Play, Pause, RotateCcw, Volume2, VolumeX, CheckCircle2, Youtube, BookOpen } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useYoutubeSearch } from "@/hooks/useYoutubeSearch";
 
 interface GuidedSessionModalProps {
   isOpen: boolean;
@@ -74,8 +75,39 @@ export function GuidedSessionModal({
   const [isMuted, setIsMuted] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const [selectedVideoId, setSelectedVideoId] = useState<string | undefined>(() => practiceVideos[title]?.id);
 
-  const video = practiceVideos[title];
+  const fallbackVideo = practiceVideos[title];
+  const fallbackVideoId = fallbackVideo?.id;
+  const searchQuery = useMemo(() => {
+    const base = [title, description].filter(Boolean).join(" ");
+    return `${base} breathing guide`;
+  }, [title, description]);
+
+  const {
+    data: youtubeVideos,
+    isLoading: isYoutubeLoading,
+    error: youtubeError,
+  } = useYoutubeSearch(searchQuery, 5);
+
+  useEffect(() => {
+    if (youtubeVideos && youtubeVideos.length > 0) {
+      setSelectedVideoId((current) => {
+        const stillMatches = current && youtubeVideos.some((video) => video.id === current);
+        return stillMatches ? current : youtubeVideos[0].id;
+      });
+      return;
+    }
+
+    setSelectedVideoId(fallbackVideoId);
+  }, [title, fallbackVideoId, youtubeVideos]);
+
+  const selectedVideo = youtubeVideos?.find((video) => video.id === selectedVideoId);
+  const currentVideoId = selectedVideoId ?? fallbackVideoId;
+  const currentVideoTitle =
+    selectedVideo?.title || fallbackVideo?.title || `${title} guide`;
+  const youtubeErrorMessage =
+    youtubeError instanceof Error ? youtubeError.message : undefined;
 
   // Parse duration string to seconds
   useEffect(() => {
@@ -204,14 +236,14 @@ export function GuidedSessionModal({
 
           {/* Video Tab */}
           <TabsContent value="video" className="space-y-4 mt-4">
-            {video ? (
+            {currentVideoId ? (
               <div className="space-y-4">
                 <div className="aspect-video rounded-lg overflow-hidden bg-black">
                   <iframe
                     width="100%"
                     height="100%"
-                    src={`https://www.youtube.com/embed/${video.id}?rel=0`}
-                    title={video.title}
+                    src={`https://www.youtube.com/embed/${currentVideoId}?rel=0`}
+                    title={currentVideoTitle}
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
@@ -219,7 +251,11 @@ export function GuidedSessionModal({
                   />
                 </div>
                 <p className="text-sm text-muted-foreground text-center">
-                  Follow along with this guided {title.toLowerCase()} video
+                  {selectedVideo
+                    ? `Now playing: ${selectedVideo.title}`
+                    : fallbackVideo
+                      ? `Previewing: ${fallbackVideo.title}`
+                      : "Follow along with this practice video."}
                 </p>
               </div>
             ) : (
@@ -227,6 +263,54 @@ export function GuidedSessionModal({
                 <p className="text-muted-foreground">No video available for this practice</p>
               </div>
             )}
+
+            <div className="bg-secondary/30 rounded-xl p-4 space-y-3">
+              <div className="flex items-center justify-between">
+                <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  YouTube recommendations
+                </h4>
+                {isYoutubeLoading && (
+                  <span className="text-xs text-muted-foreground">Searching...</span>
+                )}
+              </div>
+              {youtubeErrorMessage && (
+                <p className="text-xs text-destructive">
+                  Unable to fetch videos: {youtubeErrorMessage}
+                </p>
+              )}
+              <div className="grid gap-2 sm:grid-cols-2">
+                {youtubeVideos?.map((result) => (
+                  <button
+                    key={result.id}
+                    type="button"
+                    onClick={() => setSelectedVideoId(result.id)}
+                    className={`flex items-start gap-3 rounded-xl border p-3 text-left transition ${
+                      selectedVideoId === result.id
+                        ? "border-primary bg-primary/10 shadow-sm"
+                        : "border-border hover:border-foreground/40"
+                    }`}
+                  >
+                    <img
+                      className="h-16 w-28 shrink-0 rounded-md object-cover"
+                      src={result.thumbnailUrl}
+                      alt={result.title}
+                      loading="lazy"
+                    />
+                    <div className="flex-1 space-y-1">
+                      <p className="text-sm font-medium text-foreground line-clamp-2">
+                        {result.title}
+                      </p>
+                      <p className="text-xs text-muted-foreground">{result.channelTitle}</p>
+                    </div>
+                  </button>
+                ))}
+                {!isYoutubeLoading && !youtubeVideos?.length && (
+                  <p className="text-xs text-muted-foreground">
+                    No recommendations available just yet. Try again shortly.
+                  </p>
+                )}
+              </div>
+            </div>
 
             {/* Steps Summary */}
             {steps.length > 0 && (

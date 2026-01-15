@@ -20,9 +20,14 @@ export function Header() {
       <div className="container">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-sm">CM</span>
+          <Link to="/" className="flex items-center gap-3">
+            <div className="w-16 h-auto overflow-hidden  border border-border bg-muted flex items-center justify-center">
+              <img
+                src="/clearmind.png"
+                alt="ClearMind logo"
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
             </div>
             <span className="font-semibold text-lg text-foreground">ClearMind</span>
           </Link>

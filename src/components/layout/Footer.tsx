@@ -7,9 +7,14 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="md:col-span-2">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-sm">CM</span>
+            <div className="flex items-center gap-4 mb-4">
+              <div className="w-16 h-auto overflow-hidden  border border-border bg-muted flex items-center justify-center">
+                <img
+                  src="/clearmind.png"
+                  alt="ClearMind logo"
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
               </div>
               <span className="font-semibold text-lg text-foreground">ClearMind</span>
             </div>
