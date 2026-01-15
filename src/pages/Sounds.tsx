@@ -95,7 +95,7 @@ export default function Sounds() {
                   { title: "Chinese", subtitle: "Guqin & Bowls", category: "chinese" as const },
                   { title: "Indian", subtitle: "Mantras & Ragas", category: "indian" as const },
                   { title: "Malay", subtitle: "Gamelan", category: "malay" as const },
-                  { title: "Nature", subtitle: "Singapore Parks", category: "nature" as const },
+                  { title: "Nature", subtitle: "Parks & Gardens", category: "nature" as const },
                 ].map((cat, index) => (
                   <motion.div
                     key={cat.category}

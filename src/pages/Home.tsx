@@ -38,7 +38,7 @@ export default function Home() {
               {greeting()}
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground">
-              Find your calm through culturally-informed wellness practices designed for Singapore.
+              Find your calm through culturally-informed wellness practices designed for you.
             </p>
           </div>
         </div>
@@ -123,7 +123,7 @@ export default function Home() {
             />
             <SoundCategoryCard
               title="Nature"
-              subtitle="Singapore Parks & Gardens"
+              subtitle="Parks & Gardens"
               category="nature"
               trackCount={20}
               onClick={() => navigate("/sounds?category=nature")}
