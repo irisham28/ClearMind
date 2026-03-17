@@ -1,8 +1,18 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useAuth } from "@/contexts/AuthContext";
 
 const navItems = [
   { label: "Home", path: "/" },
@@ -14,9 +24,16 @@ const navItems = [
 export function Header() {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
+  const { user, signOut } = useAuth();
+
+  const handleLogout = async () => {
+    await signOut();
+    navigate("/");
+  };
 
   return (
-    <header className="sticky top-0 z-50 bg-card/95 backdrop-blur-sm border-b border-border">
+    <header className="sticky top-0 z-50 bg-white/80 dark:bg-card/80 backdrop-blur-2xl border-b border-border shadow-sm">
       <div className="container">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -53,6 +70,50 @@ export function Header() {
             })}
           </nav>
 
+          <div className="hidden md:flex items-center gap-3">
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    type="button"
+                    className="inline-flex items-center justify-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-sm font-medium hover:bg-muted"
+                  >
+                    <Avatar>
+                      <AvatarFallback>{user.email?.[0]?.toUpperCase() ?? "U"}</AvatarFallback>
+                    </Avatar>
+                    <span className="hidden text-xs font-semibold sm:block">
+                      {user.email?.split("@")[0]}
+                    </span>
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel className="text-xs">
+                    Signed in as {user.email}
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link to="/profile">Profile</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onSelect={handleLogout}>Logout</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  className="text-sm font-medium text-muted-foreground hover:text-foreground"
+                >
+                  Login
+                </Link>
+                <Link to="/signup">
+                  <Button size="sm" className="px-4 py-2">
+                    Sign up
+                  </Button>
+                </Link>
+              </>
+            )}
+          </div>
+
           {/* Mobile Menu Button */}
           <Button
             variant="ghost"
@@ -86,6 +147,36 @@ export function Header() {
                   </Link>
                 );
               })}
+              <div className="mt-3 flex items-center justify-between border-t border-border/40 pt-3">
+                {user ? (
+                  <>
+                    <Link to="/profile" className="text-sm font-medium text-foreground">
+                      Profile
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        handleLogout();
+                      }}
+                      className="text-sm font-medium text-destructive hover:text-destructive-foreground"
+                    >
+                      Logout
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Link to="/login" className="text-sm font-medium text-muted-foreground">
+                      Login
+                    </Link>
+                    <Link to="/signup">
+                      <Button size="sm" variant="outline">
+                        Sign up
+                      </Button>
+                    </Link>
+                  </>
+                )}
+              </div>
             </div>
           </nav>
         )}

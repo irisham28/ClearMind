@@ -7,6 +7,7 @@ import { AnimatePresence } from "framer-motion";
 import { AudioProvider } from "@/contexts/AudioContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { WellnessSurveyProvider } from "@/contexts/WellnessSurveyContext";
+import { AuthProvider } from "@/contexts/AuthContext";
 import { PersistentAudioPlayer } from "@/components/audio/PersistentAudioPlayer";
 import Index from "./pages/Index";
 import Sounds from "./pages/Sounds";
@@ -17,6 +18,9 @@ import Privacy from "./pages/Privacy";
 import FAQ from "./pages/FAQ";
 import DailyRoutine from "./pages/DailyRoutine";
 import NotFound from "./pages/NotFound";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Profile from "./pages/Profile";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +38,9 @@ function AnimatedRoutes() {
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/daily-routine" element={<DailyRoutine />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AnimatePresence>
@@ -42,20 +49,26 @@ function AnimatedRoutes() {
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <ThemeProvider>
-      <WellnessSurveyProvider>
-        <AudioProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <AnimatedRoutes />
-              <PersistentAudioPlayer />
-            </BrowserRouter>
-          </TooltipProvider>
-        </AudioProvider>
-      </WellnessSurveyProvider>
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider>
+        <WellnessSurveyProvider>
+          <AudioProvider>
+            <TooltipProvider>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter
+                future={{
+                  v7_relativeSplatPath: true,
+                }}
+              >
+                <AnimatedRoutes />
+                <PersistentAudioPlayer />
+              </BrowserRouter>
+            </TooltipProvider>
+          </AudioProvider>
+        </WellnessSurveyProvider>
+      </ThemeProvider>
+    </AuthProvider>
   </QueryClientProvider>
 );
 

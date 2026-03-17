@@ -10,12 +10,12 @@ export function WellnessSurveyForm() {
   const { questions, responses, submitResponse } = useWellnessSurvey();
 
   return (
-    <div className="feature-card space-y-6">
+    <div className="feature-card daily-checkin-card space-y-6">
       <div>
-        <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+        <p className="text-xs font-medium text-white uppercase tracking-wider">
           Daily Check-in
         </p>
-        <p className="text-sm text-muted-foreground mt-1">
+        <p className="text-sm text-white/70 mt-1">
           Capture how you feel and adjust your practices. Tap a score to save it instantly.
         </p>
       </div>
@@ -30,13 +30,11 @@ export function WellnessSurveyForm() {
           return (
             <div key={question.id} className="space-y-2">
               <div className="flex items-center justify-between">
-                <p className="text-sm font-semibold text-foreground">
-                  {question.prompt}
-                </p>
-                <span className="text-xs text-muted-foreground">{question.category}</span>
+                <p className="text-sm font-semibold text-white">{question.prompt}</p>
+                <span className="text-xs text-white/60">{question.category}</span>
               </div>
               {question.hint && (
-                <p className="text-xs text-muted-foreground">{question.hint}</p>
+                <p className="text-xs text-white/60">{question.hint}</p>
               )}
 
               <ToggleGroup
@@ -56,14 +54,14 @@ export function WellnessSurveyForm() {
                     value={value.toString()}
                     size="sm"
                     variant="outline"
-                    className="text-[12px] text-foreground"
+                    className="text-[12px] text-white"
                   >
                     {value}
                   </ToggleGroupItem>
                 ))}
               </ToggleGroup>
 
-              <div className="flex items-center justify-between text-[11px] text-muted-foreground uppercase tracking-wide">
+              <div className="flex items-center justify-between text-[11px] text-white/60 uppercase tracking-wide">
                 {likertScale.map((item) => (
                   <span key={`${question.id}-label-${item.value}`}>{item.label}</span>
                 ))}
