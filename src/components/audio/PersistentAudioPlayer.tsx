@@ -1,7 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Play, Pause, Volume2, VolumeX, X, SkipBack, SkipForward } from "lucide-react";
 import { useAudio } from "@/contexts/AudioContext";
-import { useWellnessSurvey } from "@/contexts/WellnessSurveyContext";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
@@ -17,7 +16,6 @@ export function PersistentAudioPlayer() {
     seekTo, 
     closePlayer 
   } = useAudio();
-  const { score } = useWellnessSurvey();
 
   if (!currentTrack) return null;
 
@@ -97,13 +95,6 @@ export function PersistentAudioPlayer() {
                 <p className="text-sm text-muted-foreground capitalize">{currentTrack.category} • {currentTrack.duration}</p>
               </div>
               </motion.div>
-              <div className="hidden md:flex flex-col items-end text-right space-y-1">
-                <span className="text-[11px] uppercase tracking-wide text-muted-foreground">
-                  Wellness Score
-                </span>
-                <span className="text-lg font-bold text-primary">{score}</span>
-              </div>
-
               {/* Controls */}
             <div className="flex items-center gap-2">
               <Button variant="ghost" size="icon" className="hidden md:flex">

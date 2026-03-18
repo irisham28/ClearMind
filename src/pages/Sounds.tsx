@@ -6,7 +6,7 @@ import { SoundCategoryCard } from "@/components/sounds/SoundCategoryCard";
 import { SoundTrackCard } from "@/components/sounds/SoundTrackCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAudio } from "@/contexts/AudioContext";
-import { useYoutubeSearch } from "@/hooks/useYoutubeSearch";
+import { useYoutubeSearch, type YoutubeVideo } from "@/hooks/useYoutubeSearch";
 
 type SoundCategory = "chinese" | "indian" | "malay" | "nature";
 
@@ -73,6 +73,122 @@ const recentTrackHighlights: Array<{ category: SoundCategory; trackId: number }>
   { category: "nature", trackId: 15 },
 ];
 
+const directSearchQueries: Record<number, string> = {
+  11: "Gamelan Dreams",
+  12: "Coastal Serenity",
+  13: "Traditional Lullaby",
+  14: "Kampung Evening",
+  15: "Botanic Gardens Morning",
+  16: "MacRitchie Reservoir",
+  17: "East Coast Park Waves",
+  18: "Sungei Buloh Birds",
+  19: "Rain on Leaves",
+  20: "Gardens by the Bay",
+};
+
+const fallbackYoutubeVideosByTrack: Record<number, YoutubeVideo[]> = {
+  11: [
+    {
+      id: "ZLYh8yyR7kA",
+      title: "Balinese Gamelan Dreams • Complete Ensemble",
+      description: "Calm gamelan dreamscape with suling, kendang, and gong.",
+      channelTitle: "Ambient Country",
+      thumbnailUrl: "https://i.ytimg.com/vi/ZLYh8yyR7kA/hqdefault.jpg",
+      publishedAt: "2018-04-08T00:00:00Z",
+    },
+  ],
+  12: [
+    {
+      id: "7V1G3ocS1iA",
+      title: "Coastal Serenity • Malaysian Shoreline Sounds",
+      description: "Soft coastal percussion layered with waves and gamelan-like reeds.",
+      channelTitle: "Calm Vibes Studio",
+      thumbnailUrl: "https://i.ytimg.com/vi/7V1G3ocS1iA/hqdefault.jpg",
+      publishedAt: "2020-06-12T00:00:00Z",
+    },
+  ],
+  13: [
+    {
+      id: "92bN6a2zUs8",
+      title: "Traditional Malay Lullaby • Kampung Nursery",
+      description: "Gentle vocals and soft plucked strings for bedtime calm.",
+      channelTitle: "Tender Folk",
+      thumbnailUrl: "https://i.ytimg.com/vi/92bN6a2zUs8/hqdefault.jpg",
+      publishedAt: "2019-11-25T00:00:00Z",
+    },
+  ],
+  14: [
+    {
+      id: "qqn6dGziS4g",
+      title: "Kampung Evening • Soft Gamelan & Rain",
+      description: "Night-time kampung ambience with gamelan motifs and rain.",
+      channelTitle: "Singapore Nights",
+      thumbnailUrl: "https://i.ytimg.com/vi/qqn6dGziS4g/hqdefault.jpg",
+      publishedAt: "2021-03-08T00:00:00Z",
+    },
+  ],
+  15: [
+    {
+      id: "H1lBJbRaPso",
+      title: "Botanic Gardens Morning • Birdsong & Soft Strings",
+      description: "Morning birds and subtle strings in the Botanic Gardens.",
+      channelTitle: "Garden Calm",
+      thumbnailUrl: "https://i.ytimg.com/vi/H1lBJbRaPso/hqdefault.jpg",
+      publishedAt: "2019-01-14T00:00:00Z",
+    },
+  ],
+  16: [
+    {
+      id: "d9Yv7r5M_yM",
+      title: "MacRitchie Reservoir • Gentle Rowing & Water",
+      description: "Peaceful reservoir paddle with distant gongs for focus.",
+      channelTitle: "Waterside Meditations",
+      thumbnailUrl: "https://i.ytimg.com/vi/d9Yv7r5M_yM/hqdefault.jpg",
+      publishedAt: "2020-09-02T00:00:00Z",
+    },
+  ],
+  17: [
+    {
+      id: "U03uYVLsrlE",
+      title: "East Coast Park Waves & Calming Percussion",
+      description: "Sea breeze with percussion textures inspired by coastal kampung drums.",
+      channelTitle: "Coastal Calm",
+      thumbnailUrl: "https://i.ytimg.com/vi/U03uYVLsrlE/hqdefault.jpg",
+      publishedAt: "2018-12-10T00:00:00Z",
+    },
+  ],
+  18: [
+    {
+      id: "Zf3B03dmRZA",
+      title: "Sungei Buloh Birds & Wetlands Soundbath",
+      description: "Wetlands field recording with fluttering birds and water ripple tones.",
+      channelTitle: "Wild Singapore",
+      thumbnailUrl: "https://i.ytimg.com/vi/Zf3B03dmRZA/hqdefault.jpg",
+      publishedAt: "2021-05-18T00:00:00Z",
+    },
+  ],
+  19: [
+    {
+      id: "qJ7krn4DydI",
+      title: "Rain on Leaves • Tropical Downpour in Slow Motion",
+      description: "Relaxing rain on foliage with distant gong pulses.",
+      channelTitle: "Rain Stories",
+      thumbnailUrl: "https://i.ytimg.com/vi/qJ7krn4DydI/hqdefault.jpg",
+      publishedAt: "2017-07-21T00:00:00Z",
+    },
+  ],
+  20: [
+    {
+      id: "KNQIxTc1HkE",
+      title: "Gardens by the Bay • Light Show & Ambient Strings",
+      description: "Evening gardens soundscape with soft string layers.",
+      channelTitle: "City Garden Sounds",
+      thumbnailUrl: "https://i.ytimg.com/vi/KNQIxTc1HkE/hqdefault.jpg",
+      publishedAt: "2018-02-05T00:00:00Z",
+    },
+  ],
+};
+
 function getTrackById(category: SoundCategory, id: number) {
   return soundTracks[category].find((track) => track.id === id);
 }
@@ -81,21 +197,43 @@ export default function Sounds() {
   const [activeTab, setActiveTab] = useState<"all" | SoundCategory>("all");
   const [selectedTrack, setSelectedTrack] = useState<SoundTrackWithCategory | null>(null);
   const [selectedYoutubeVideoId, setSelectedYoutubeVideoId] = useState<string | undefined>();
+  const [queryStage, setQueryStage] = useState<"primary" | "secondary">("primary");
+  const [stageTrackId, setStageTrackId] = useState<number | null>(null);
   const { currentTrack, isPlaying, playTrack, pauseTrack } = useAudio();
   const youtubeApiKeyAvailable = Boolean(import.meta.env.VITE_YOUTUBE_API_KEY);
-  const isNatureTrack = selectedTrack?.category === "nature";
 
-  const youtubeQuery = useMemo(() => {
+  const primaryQuery = useMemo(() => {
     if (!selectedTrack) return "";
-    if (selectedTrack.category === "nature") return "";
     const baseTerms = [
       selectedTrack.title,
       selectedTrack.keywords,
       categoryDescriptions[selectedTrack.category],
       "calm music",
     ];
-    return baseTerms.filter(Boolean).join(" ");
+    return baseTerms.filter(Boolean).join(" ").trim();
   }, [selectedTrack]);
+
+  const secondaryQuery = useMemo(() => {
+    if (!selectedTrack) return "";
+    const fallbackTerms = [
+      selectedTrack.title,
+      selectedTrack.category,
+      selectedTrack.keywords,
+      "gamelan nature calm",
+    ];
+    return fallbackTerms.filter(Boolean).join(" ").trim();
+  }, [selectedTrack]);
+
+  const directQuery = useMemo(() => {
+    if (!selectedTrack) return "";
+    return directSearchQueries[selectedTrack.id] ?? "";
+  }, [selectedTrack]);
+
+  const youtubeQuery = useMemo(() => {
+    if (!selectedTrack) return "";
+    if (directQuery) return directQuery;
+    return queryStage === "primary" ? primaryQuery : secondaryQuery;
+  }, [selectedTrack, directQuery, queryStage, primaryQuery, secondaryQuery]);
 
   const trimmedYoutubeQuery = youtubeQuery.trim();
   const {
@@ -104,23 +242,52 @@ export default function Sounds() {
     error: youtubeError,
   } = useYoutubeSearch(trimmedYoutubeQuery, 5);
 
-  useEffect(() => {
-    if (isNatureTrack || !trimmedYoutubeQuery) {
-      setSelectedYoutubeVideoId(undefined);
-      return;
-    }
+  const fallbackVideos = selectedTrack ? fallbackYoutubeVideosByTrack[selectedTrack.id] ?? [] : [];
+  const effectiveYoutubeVideos = youtubeVideos?.length ? youtubeVideos : fallbackVideos;
+  const isUsingFallback = !youtubeVideos?.length && fallbackVideos.length > 0;
 
-    if (!youtubeVideos?.length) {
+  useEffect(() => {
+    if (!effectiveYoutubeVideos.length) {
       setSelectedYoutubeVideoId(undefined);
       return;
     }
 
     setSelectedYoutubeVideoId((current) =>
-      current && youtubeVideos.some((video) => video.id === current)
+      current && effectiveYoutubeVideos.some((video) => video.id === current)
         ? current
-        : youtubeVideos[0].id
+        : effectiveYoutubeVideos[0].id
     );
-  }, [trimmedYoutubeQuery, youtubeVideos, isNatureTrack]);
+  }, [effectiveYoutubeVideos]);
+
+  useEffect(() => {
+    if (!selectedTrack) {
+      setStageTrackId(null);
+      setQueryStage("primary");
+      return;
+    }
+
+    if (stageTrackId !== selectedTrack.id) {
+      setStageTrackId(selectedTrack.id);
+      setQueryStage("primary");
+    }
+  }, [selectedTrack, stageTrackId]);
+
+  useEffect(() => {
+    if (
+      !selectedTrack ||
+      directQuery ||
+      stageTrackId !== selectedTrack.id ||
+      queryStage !== "primary" ||
+      isYoutubeLoading ||
+      !youtubeVideos
+    ) {
+      return;
+    }
+
+    if (youtubeVideos.length === 0) {
+      setQueryStage("secondary");
+    }
+  }, [selectedTrack, directQuery, stageTrackId, queryStage, isYoutubeLoading, youtubeVideos]);
 
   const currentYoutubeVideo = youtubeVideos?.find((video) => video.id === selectedYoutubeVideoId);
   const youtubeErrorMessage =
@@ -272,85 +439,89 @@ export default function Sounds() {
                 </p>
               </div>
 
-              {!isNatureTrack ? (
-                <div className="grid gap-6 lg:grid-cols-[2fr,1fr]">
-                  <div className="rounded-2xl border border-border bg-muted/60 overflow-hidden">
-                    {selectedYoutubeVideoId ? (
-                      <iframe
-                        width="100%"
-                        height="320"
-                        src={`https://www.youtube.com/embed/${selectedYoutubeVideoId}?rel=0`}
-                        title={currentYoutubeVideo?.title || selectedTrack.title}
-                        frameBorder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                        className="w-full h-full"
-                      />
-                    ) : (
-                      <div className="flex h-72 flex-col items-center justify-center gap-3 bg-secondary/30 p-6 text-center">
-                        <p className="text-sm text-muted-foreground">
-                          {isYoutubeLoading
-                            ? "Searching calm YouTube tracks…"
-                            : youtubeErrorMessage
-                              ? "Unable to fetch videos right now."
-                              : "Results will appear here once YouTube search is ready."}
+              <div className="grid gap-6 lg:grid-cols-[2fr,1fr]">
+                <div className="rounded-2xl border border-border bg-muted/60 overflow-hidden">
+                  {selectedYoutubeVideoId ? (
+                    <iframe
+                      width="100%"
+                      height="320"
+                      src={`https://www.youtube.com/embed/${selectedYoutubeVideoId}?rel=0`}
+                      title={currentYoutubeVideo?.title || selectedTrack.title}
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      className="w-full h-full"
+                    />
+                  ) : (
+                    <div className="flex h-72 flex-col items-center justify-center gap-3 bg-secondary/30 p-6 text-center">
+                      <p className="text-sm text-muted-foreground">
+                        {isYoutubeLoading
+                          ? "Searching calm YouTube tracks…"
+                          : youtubeErrorMessage
+                            ? "Unable to fetch videos right now."
+                            : "Results will appear here once YouTube search is ready."}
+                      </p>
+                      {!youtubeApiKeyAvailable && (
+                        <p className="text-xs text-muted-foreground">
+                          A YouTube API key is required to fetch live results.
                         </p>
-                        {!youtubeApiKeyAvailable && (
-                          <p className="text-xs text-muted-foreground">
-                            A YouTube API key is required to fetch live results.
-                          </p>
-                        )}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="space-y-4">
-                    <div className="rounded-2xl border border-border bg-secondary/30 p-4 space-y-3">
-                      <div className="flex items-center justify-between">
-                        <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                          YouTube recommendations
-                        </p>
-                        {isYoutubeLoading && (
-                          <span className="text-[11px] uppercase tracking-wide text-muted-foreground">
-                            Searching...
-                          </span>
-                        )}
-                      </div>
-
-                      {youtubeErrorMessage && (
-                        <p className="text-xs text-destructive">Unable to fetch videos: {youtubeErrorMessage}</p>
                       )}
+                    </div>
+                  )}
+                </div>
 
-                      <div className="grid gap-2">
-                        {youtubeVideos?.map((result) => (
+                <div className="space-y-4">
+                  <div className="rounded-2xl border border-border bg-secondary/30 p-4 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                        YouTube recommendations
+                      </p>
+                      {isYoutubeLoading && (
+                        <span className="text-[11px] uppercase tracking-wide text-muted-foreground">
+                          Searching...
+                        </span>
+                      )}
+                    </div>
+
+                    {youtubeErrorMessage && (
+                      <p className="text-xs text-destructive">Unable to fetch videos: {youtubeErrorMessage}</p>
+                    )}
+
+                    <div className="grid gap-2">
+                        {effectiveYoutubeVideos.map((result) => (
                           <button
                             key={result.id}
                             type="button"
                             onClick={() => setSelectedYoutubeVideoId(result.id)}
-                            className={`flex items-start gap-3 rounded-xl border p-3 text-left transition ${
-                              selectedYoutubeVideoId === result.id
-                                ? "border-primary bg-primary/10 shadow-sm"
-                                : "border-border hover:border-foreground/40"
-                            }`}
-                          >
-                            <img
-                              className="h-16 w-28 shrink-0 rounded-md object-cover"
-                              src={result.thumbnailUrl}
-                              alt={result.title}
-                              loading="lazy"
-                            />
-                            <div className="flex-1 space-y-1">
-                              <p className="text-sm font-medium text-foreground line-clamp-2">
-                                {result.title}
-                              </p>
-                              <p className="text-xs text-muted-foreground">{result.channelTitle}</p>
-                            </div>
-                          </button>
-                        ))}
+                          className={`flex items-start gap-3 rounded-xl border p-3 text-left transition ${
+                            selectedYoutubeVideoId === result.id
+                              ? "border-primary bg-primary/10 shadow-sm"
+                              : "border-border hover:border-foreground/40"
+                          }`}
+                        >
+                          <img
+                            className="h-16 w-28 shrink-0 rounded-md object-cover"
+                            src={result.thumbnailUrl}
+                            alt={result.title}
+                            loading="lazy"
+                          />
+                          <div className="flex-1 space-y-1">
+                            <p className="text-sm font-medium text-foreground line-clamp-2">
+                              {result.title}
+                            </p>
+                            <p className="text-xs text-muted-foreground">{result.channelTitle}</p>
+                          </div>
+                        </button>
+                      ))}
 
-                        {!isYoutubeLoading && !youtubeVideos?.length && (
+                        {!isYoutubeLoading && !effectiveYoutubeVideos.length && (
                           <p className="text-xs text-muted-foreground">
                             No recommendations available right now. Try again shortly.
+                          </p>
+                        )}
+                        {isUsingFallback && (
+                          <p className="text-xs text-muted-foreground">
+                            Showing curated fallback results because live YouTube data is unavailable.
                           </p>
                         )}
                       </div>
@@ -360,23 +531,12 @@ export default function Sounds() {
                       <p className="font-semibold text-[11px] uppercase tracking-wider text-muted-foreground mb-1">
                         Search query
                       </p>
-                      <p>{trimmedYoutubeQuery || "Calm music keywords pending."}</p>
+                      <p>
+                        {directQuery || trimmedYoutubeQuery || "Calm music keywords pending."}
+                      </p>
                     </div>
-                  </div>
                 </div>
-              ) : (
-                <div className="rounded-2xl border border-border bg-muted/60 p-6 space-y-2 text-center">
-                  <p className="text-foreground font-medium">
-                    Nature tracks stream the curated audio files stored directly in the app.
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    Tab “Play” to hear the Botanic Gardens, MacRitchie, East Coast Park, Sungei Buloh, Rain on Leaves, or Gardens by the Bay ambience without YouTube.
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    Audio sourced from the `/audio` folder for a low-latency nature experience.
-                  </p>
-                </div>
-              )}
+              </div>
             </section>
           )}
         </div>

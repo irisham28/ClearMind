@@ -8,7 +8,6 @@ import { AudioProvider } from "@/contexts/AudioContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { WellnessSurveyProvider } from "@/contexts/WellnessSurveyContext";
 import { AuthProvider } from "@/contexts/AuthContext";
-import { PersistentAudioPlayer } from "@/components/audio/PersistentAudioPlayer";
 import Index from "./pages/Index";
 import Sounds from "./pages/Sounds";
 import Mindfulness from "./pages/Mindfulness";
@@ -62,7 +61,6 @@ const App = () => (
                 }}
               >
                 <AnimatedRoutes />
-                <PersistentAudioPlayer />
               </BrowserRouter>
             </TooltipProvider>
           </AudioProvider>
