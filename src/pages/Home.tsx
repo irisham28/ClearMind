@@ -262,7 +262,7 @@ export default function Home() {
             </div>
             <Button variant="outline" size="sm" onClick={() => navigate("/daily-routine")}>Refine plan</Button>
           </div>
-          {score <= 30 ? (
+          {score <= 40 ? (
             <>
               <div className="grid gap-4 md:grid-cols-3">
                 {lowScorePlanEntries.map((entry) => (

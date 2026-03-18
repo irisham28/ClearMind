@@ -178,7 +178,7 @@ export default function Profile() {
               </div>
               <Badge variant="outline">{checkins.length} entries</Badge>
             </div>
-            <div className="space-y-3">
+            <div className="max-h-[360px] space-y-3 overflow-y-auto pr-1">
               {isLoading && <p className="text-sm text-white">Loading...</p>}
               {!isLoading && !checkins.length && (
                 <p className="text-sm text-white">No check-ins yet. Tap a score on Home.</p>

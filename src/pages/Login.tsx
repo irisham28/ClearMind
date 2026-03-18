@@ -54,10 +54,17 @@ export default function Login() {
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
-                type="email"
+                type="text"
+                inputMode="email"
                 placeholder="name@example.com"
                 autoComplete="email"
-                {...register("email", { required: "Email is required" })}
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: "Enter a valid email address",
+                  },
+                })}
               />
             </div>
             <div className="space-y-1.5">

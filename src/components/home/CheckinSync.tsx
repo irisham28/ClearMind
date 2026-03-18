@@ -28,16 +28,30 @@ export function CheckinSync() {
       created_at: new Date(latestCheckin.timestamp).toISOString(),
     };
 
-    supabase
-      .from("checkins")
-      .insert(payload)
-      .then(({ error }) => {
+    const syncCheckin = async () => {
+      try {
+        await supabase.from("profiles").upsert({
+          id: user.id,
+          email: user.email,
+          full_name: user.user_metadata?.full_name ?? null,
+        });
+
+        const { error } = await supabase.from("checkins").insert(payload);
         if (error) {
           toast({ title: "Unable to sync check-in", description: error.message });
           return;
         }
+
         lastSyncedRef.current = latestCheckin.timestamp;
-      });
+      } catch (error) {
+        toast({
+          title: "Unable to sync check-in",
+          description: (error as Error).message,
+        });
+      }
+    };
+
+    syncCheckin();
   }, [categoryScores, history, responses, toast, user]);
 
   return null;
