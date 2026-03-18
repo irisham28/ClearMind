@@ -14,49 +14,10 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 const colorThemes: Record<ThemeColor, Record<string, string>> = {
   default: {
-    "--primary": "152 32% 42%",
-    "--background": "40 20% 98%",
-    "--secondary": "180 25% 94%",
-    "--accent": "20 60% 55%",
-  },
-  cream: {
-    "--primary": "35 55% 45%",
-    "--background": "40 40% 96%",
-    "--secondary": "35 30% 90%",
-    "--accent": "25 65% 50%",
-  },
-  ocean: {
-    "--primary": "200 65% 45%",
-    "--background": "200 25% 97%",
-    "--secondary": "200 30% 92%",
-    "--accent": "180 50% 45%",
-  },
-  forest: {
-    "--primary": "140 40% 40%",
-    "--background": "140 15% 97%",
-    "--secondary": "140 20% 92%",
-    "--accent": "100 45% 45%",
-  },
-  lavender: {
-    "--primary": "270 45% 55%",
-    "--background": "270 20% 97%",
-    "--secondary": "270 25% 93%",
-    "--accent": "300 40% 50%",
-  },
-  sunset: {
-    "--primary": "20 70% 50%",
-    "--background": "30 30% 97%",
-    "--secondary": "30 35% 92%",
-    "--accent": "350 60% 55%",
-  },
-};
-
-const darkColorThemes: Record<ThemeColor, Record<string, string>> = {
-  default: {
-    "--primary": "152 35% 55%",
-    "--background": "220 15% 10%",
-    "--secondary": "220 15% 18%",
-    "--accent": "20 50% 50%",
+    "--primary": "206 40% 57%",
+    "--background": "252 14% 19%",
+    "--secondary": "260 12% 32%",
+    "--accent": "22 70% 60%",
   },
   cream: {
     "--primary": "35 55% 55%",
@@ -90,70 +51,33 @@ const darkColorThemes: Record<ThemeColor, Record<string, string>> = {
   },
 };
 
+const darkColorThemes: Record<ThemeColor, Record<string, string>> = colorThemes;
+
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [mode, setMode] = useState<ThemeMode>(() => {
-    const saved = localStorage.getItem("theme-mode") as ThemeMode;
-    return saved || "system";
-  });
+  const [mode, setMode] = useState<ThemeMode>("dark");
   
   const [color, setColor] = useState<ThemeColor>(() => {
-    const saved = localStorage.getItem("theme-color") as ThemeColor;
+    if (typeof window === "undefined") {
+      return "default";
+    }
+
+    const saved = window.localStorage.getItem("theme-color") as ThemeColor;
     return saved || "default";
   });
 
   useEffect(() => {
-    localStorage.setItem("theme-mode", mode);
-    localStorage.setItem("theme-color", color);
+    if (typeof window === "undefined") {
+      return;
+    }
 
     const root = document.documentElement;
-    
-    // Determine effective mode
-    let effectiveMode: "light" | "dark" = "light";
-    if (mode === "system") {
-      effectiveMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-    } else {
-      effectiveMode = mode;
-    }
+    root.classList.add("dark");
+    window.localStorage.setItem("theme-color", color);
 
-    // Apply dark class
-    if (effectiveMode === "dark") {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
-    }
-
-    // Apply color theme
-    const themeColors = effectiveMode === "dark" ? darkColorThemes[color] : colorThemes[color];
-    Object.entries(themeColors).forEach(([property, value]) => {
+    Object.entries(darkColorThemes[color]).forEach(([property, value]) => {
       root.style.setProperty(property, value);
     });
-  }, [mode, color]);
-
-  // Listen for system theme changes
-  useEffect(() => {
-    if (mode !== "system") return;
-
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    const handler = () => {
-      const root = document.documentElement;
-      const isDark = mediaQuery.matches;
-      
-      if (isDark) {
-        root.classList.add("dark");
-        Object.entries(darkColorThemes[color]).forEach(([property, value]) => {
-          root.style.setProperty(property, value);
-        });
-      } else {
-        root.classList.remove("dark");
-        Object.entries(colorThemes[color]).forEach(([property, value]) => {
-          root.style.setProperty(property, value);
-        });
-      }
-    };
-
-    mediaQuery.addEventListener("change", handler);
-    return () => mediaQuery.removeEventListener("change", handler);
-  }, [mode, color]);
+  }, [color]);
 
   return (
     <ThemeContext.Provider value={{ mode, color, setMode, setColor }}>

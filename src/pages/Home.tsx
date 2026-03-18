@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { WellnessScore } from "@/components/home/WellnessScore";
@@ -11,7 +10,6 @@ import { CheckinSync } from "@/components/home/CheckinSync";
 import { Music, Sparkles, BookOpen, Wind, Calendar, Bookmark, Globe, Compass } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { WellnessCategory } from "@/data/wellnessQuestions";
 
 interface FavoriteJourney {
   title: string;
@@ -160,30 +158,45 @@ const articleHighlights: ArticleHighlight[] = [
   },
 ];
 
-const planSuggestions: Record<WellnessCategory, { title: string; detail: string }> = {
-  Emotion: {
-    title: "Gong & breath resets",
-    detail: "Pair deep gongs with slow, wide exhales to soften emotion and invite calm.",
-  },
-  Focus: {
-    title: "Yoga micro flow",
-    detail: "A short lotus-inspired sequence to re-center attention before the next task.",
-  },
-  Sound: {
-    title: "Cultural soundscapes",
-    detail: "Cue guqin, gongs, and local nature textures to ground the nervous system.",
-  },
-  Balance: {
+const lowScorePlanEntries = [
+  {
+    category: "Balance",
+    percent: 60,
     title: "Pranayama balance",
     detail: "Alternate nostril and sama vritti breathing steadies energy across the day.",
   },
-  Mindfulness: {
+  {
+    category: "Mindfulness",
+    percent: 80,
     title: "Reflective pause",
     detail: "Capture one win, breathe for four counts, and set a gentle intention for the hour.",
   },
+  {
+    category: "Emotion",
+    percent: 100,
+    title: "Gong & breath resets",
+    detail: "Pair deep gongs with slow, wide exhales to soften emotion and invite calm.",
+  },
+];
+
+const lowScorePlanCtas = [
+  { label: "Sounds", route: "/sounds" },
+  { label: "Mindfulness", route: "/mindfulness" },
+  { label: "Resources", route: "/resources" },
+];
+
+const midScorePlan = {
+  title: "Mindfulness reset",
+  detail:
+    "Drop into a gentle guided pause, a soft body scan, and reflective journaling cues to keep awareness steady between tasks.",
+  note: "Capture a small win, breathe to four, and set a gentle intention before your next move.",
 };
 
-const categoryOrder: WellnessCategory[] = ["Mindfulness", "Emotion", "Focus", "Sound", "Balance"];
+const highScorePlan = {
+  title: "You're steady — stay curious",
+  detail:
+    "Your check-in shows resilience. Use curated resources, ambient soundscapes, and stories to stay inspired without overworking.",
+};
 
 export default function Home() {
   const navigate = useNavigate();
@@ -204,19 +217,6 @@ export default function Home() {
         minute: "2-digit",
       })
     : undefined;
-
-  const planTargets = useMemo(
-    () =>
-      categoryOrder
-        .map((category) => ({
-          category,
-          score: categoryScores[category] ?? 0,
-          suggestion: planSuggestions[category],
-        }))
-        .sort((a, b) => a.score - b.score)
-        .slice(0, 3),
-    [categoryScores],
-  );
 
   return (
     <AppLayout>
@@ -239,6 +239,7 @@ export default function Home() {
 
       <div className="container py-10 md:py-12 space-y-12">
         <section className="space-y-6">
+          <WellnessSurveyForm />
           <div className="max-w-md">
             <WellnessScore score={score} change={change} lastUpdated={lastUpdatedLabel} />
           </div>
@@ -248,7 +249,6 @@ export default function Home() {
             history={history}
             categoryScores={categoryScores}
           />
-          <WellnessSurveyForm />
         </section>
 
         <section className="space-y-4">
@@ -262,31 +262,65 @@ export default function Home() {
             </div>
             <Button variant="outline" size="sm" onClick={() => navigate("/daily-routine")}>Refine plan</Button>
           </div>
-          <div className="grid gap-4 md:grid-cols-3">
-            {planTargets.map((target) => (
-              <div
-                key={target.category}
-                className="rounded-2xl border border-border/70 bg-surface-elevated p-4 space-y-3"
-              >
-                <div className="flex items-center justify-between text-[0.65rem] uppercase tracking-[0.3em] text-muted-foreground">
-                  <span>{target.category}</span>
-                  <span>{target.score}%</span>
-                </div>
-                <h3 className="text-lg font-semibold text-foreground">
-                  {target.suggestion.title}
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  {target.suggestion.detail}
-                </p>
-                <div className="h-2 rounded-full bg-muted">
+          {score <= 30 ? (
+            <>
+              <div className="grid gap-4 md:grid-cols-3">
+                {lowScorePlanEntries.map((entry) => (
                   <div
-                    className="h-full rounded-full bg-primary transition-all"
-                    style={{ width: `${target.score}%` }}
-                  />
-                </div>
+                    key={entry.category}
+                    className="rounded-2xl border border-border/70 bg-surface-elevated p-4 space-y-3"
+                  >
+                    <div className="flex items-center justify-between text-[0.65rem] uppercase tracking-[0.3em] text-muted-foreground">
+                      <span>{entry.category}</span>
+                      <span>{entry.percent}%</span>
+                    </div>
+                    <h3 className="text-lg font-semibold text-foreground">{entry.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{entry.detail}</p>
+                    <div className="h-2 rounded-full bg-muted">
+                      <div
+                        className="h-full rounded-full bg-primary transition-all"
+                        style={{ width: `${entry.percent}%` }}
+                      />
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+              <div className="flex flex-wrap gap-3">
+                {lowScorePlanCtas.map((cta) => (
+                  <Button key={cta.label} variant="outline" size="sm" onClick={() => navigate(cta.route)}>
+                    {cta.label}
+                  </Button>
+                ))}
+              </div>
+            </>
+          ) : score <= 60 ? (
+            <>
+              <div className="rounded-2xl border border-border/70 bg-surface-elevated p-6 space-y-3">
+                <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Mindfulness focus</p>
+                <h3 className="text-2xl font-semibold text-foreground">{midScorePlan.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{midScorePlan.detail}</p>
+                <p className="text-[0.75rem] font-medium text-muted-foreground">{midScorePlan.note}</p>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                <Button variant="outline" size="sm" onClick={() => navigate("/mindfulness")}>
+                  Mindfulness
+                </Button>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="rounded-2xl border border-border/70 bg-surface-elevated p-6 space-y-3">
+                <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Resources & recovery</p>
+                <h3 className="text-2xl font-semibold text-foreground">{highScorePlan.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{highScorePlan.detail}</p>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                <Button variant="outline" size="sm" onClick={() => navigate("/resources")}>
+                  Resources
+                </Button>
+              </div>
+            </>
+          )}
         </section>
 
         <section className="space-y-4">

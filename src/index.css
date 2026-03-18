@@ -6,69 +6,56 @@
 
 @layer base {
   :root {
-    /* Primary - Dusty blue */
-    --primary: 206 40% 65%;
+    --primary: 206 40% 57%;
     --primary-foreground: 0 0% 100%;
-    
-    /* Background */
-    --background: 219 30% 25%;
-    --foreground: 210 22% 96%;
 
-    /* Cards */
-    --card: 219 34% 30%;
-    --card-foreground: 0 0% 100%;
+    --background: 252 14% 19%;
+    --foreground: 210 25% 88%;
 
-    /* Popover */
-    --popover: 219 34% 30%;
-    --popover-foreground: 0 0% 100%;
+    --card: 252 14% 27%;
+    --card-foreground: 210 25% 88%;
 
-    /* Secondary - Muted lavender */
-    --secondary: 260 48% 73%;
+    --popover: 252 14% 27%;
+    --popover-foreground: 210 25% 88%;
+
+    --secondary: 260 12% 32%;
     --secondary-foreground: 0 0% 100%;
 
-    /* Muted - Deep slate */
-    --muted: 219 30% 20%;
-    --muted-foreground: 0 0% 80%;
+    --muted: 220 15% 24%;
+    --muted-foreground: 210 25% 80%;
 
-    /* Accent - Pale peach */
-    --accent: 22 95% 76%;
-    --accent-foreground: 18 30% 15%;
+    --accent: 22 70% 60%;
+    --accent-foreground: 0 0% 100%;
 
-    /* Destructive */
     --destructive: 4 75% 55%;
     --destructive-foreground: 0 0% 100%;
 
-    /* Borders */
-    --border: 218 15% 35%;
-    --input: 218 15% 35%;
-    --ring: 206 40% 65%;
+    --border: 220 15% 28%;
+    --input: 220 15% 28%;
+    --ring: 206 40% 57%;
 
     --radius: 0.375rem;
 
-    /* Custom semantic tokens */
-    --surface-elevated: 221 34% 29%;
-    --surface-sunken: 217 25% 23%;
-    
-    /* Category colors */
+    --surface-elevated: 252 14% 31%;
+    --surface-sunken: 252 14% 18%;
+
     --chinese: 210 75% 46%;
     --indian: 33 82% 65%;
     --malay: 160 45% 45%;
     --nature: 140 45% 45%;
-    
-    /* Shadows */
+
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.35);
     --shadow-md: 0 8px 12px -4px rgb(0 0 0 / 0.45);
     --shadow-lg: 0 15px 25px -6px rgb(0 0 0 / 0.5);
 
-    /* Sidebar tokens */
-    --sidebar-background: 219 30% 25%;
-    --sidebar-foreground: 210 22% 96%;
-    --sidebar-primary: 206 40% 65%;
+    --sidebar-background: 252 14% 19%;
+    --sidebar-foreground: 210 25% 88%;
+    --sidebar-primary: 206 40% 57%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 22 95% 76%;
-    --sidebar-accent-foreground: 18 30% 15%;
-    --sidebar-border: 218 15% 35%;
-    --sidebar-ring: 206 40% 65%;
+    --sidebar-accent: 22 70% 60%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 220 15% 28%;
+    --sidebar-ring: 206 40% 57%;
   }
 
   .dark {
